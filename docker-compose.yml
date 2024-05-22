@@ -1,13 +1,11 @@
-version: '4.0'
 services:
   db:
-    image: postgres:latest
+    image: postgres:16
     restart: always
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
       POSTGRES_DB: subscribe_db
-    volumes:
-      - ./data:/var/lib/postgresql/data
+      PGDATA: /var/lib/postgresql/data/db
     ports:
       - 5432:5432
