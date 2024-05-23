@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
+import { Workshop } from '../../workshop/entities/workShop.entity';
 
 @Entity()
 export class User {
@@ -10,6 +17,16 @@ export class User {
 
   @Column()
   lastName: string;
+
+  @Column()
+  email: string;
+
+  @Column()
+  password: string;
+
+  @ManyToMany(() => Workshop, (workshop) => workshop.workShopUsers)
+  @JoinTable()
+  workShops: Workshop[];
 
   @Column({ default: true })
   isActive: boolean;

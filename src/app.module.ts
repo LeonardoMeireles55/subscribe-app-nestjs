@@ -2,7 +2,8 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
+import { User } from './user/entities/user.entity';
+import { Workshop } from './workshop/entities/workShop.entity';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { User } from './entities/user.entity';
       username: 'root',
       password: 'root',
       database: 'subscribe_db',
-      entities: [User],
+      entities: [User, Workshop],
       synchronize: true,
       logging: true,
     }),
