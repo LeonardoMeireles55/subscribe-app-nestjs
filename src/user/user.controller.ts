@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   Param,
@@ -14,7 +15,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  async create(createUser: CreateUserDto) {
+  async create(@Body() createUser: CreateUserDto) {
     try {
       await this.userService.createUser(createUser);
       return {
@@ -45,7 +46,7 @@ export class UserController {
     }
   }
   @Get(':id')
-  async findOneById(@Param('id', new ParseIntPipe()) id: number) {
+  async findOneById(@Param('id', ParseIntPipe) id: number) {
     try {
       const user = await this.userService.getUserById(id);
       return {
@@ -60,7 +61,7 @@ export class UserController {
     }
   }
   @Patch(':id')
-  async update(id: number, updateUser: CreateUserDto) {
+  async update(@Body() id: number, updateUser: CreateUserDto) {
     try {
       await this.userService.updateUser(id, updateUser);
       return {
