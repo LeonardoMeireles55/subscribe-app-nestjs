@@ -14,7 +14,24 @@ import { CreateUserDto } from './dto/create.user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
+  @Post('subscribe')
+  async subscribeUser(@Body() body: any) {
+    try {
+      const { id, workShops } = body;
+      const user = await this.userService.subscribeUser(id, workShops);
+      return {
+        success: true,
+        data: user,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
+  }
+
+  @Post('signup')
   async create(@Body() createUser: CreateUserDto) {
     try {
       await this.userService.createUser(createUser);

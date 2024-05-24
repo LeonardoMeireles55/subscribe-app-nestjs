@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
-import { ArrayContainedBy, In, Repository } from 'typeorm';
+import { UserEntity } from './entities/user.entity';
+import { In, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create.user.dto';
 import { UpdateUserDto } from './dto/update.user.dto';
 import { Workshop } from 'src/workshop/entities/workShop.entity';
@@ -9,15 +9,16 @@ import { Workshop } from 'src/workshop/entities/workShop.entity';
 @Injectable()
 export default class UserService {
   constructor(
-    @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(Workshop)
-    private workshopRepository: Repository<Workshop>,
+    private readonly workshopRepository: Repository<Workshop>,
   ) {}
 
   async updateUser(
     id: number,
     updateUserDto: UpdateUserDto,
-  ): Promise<User | void> {
+  ): Promise<UserEntity | void> {
     const existingUser = await this.getUserById(id);
     if (!existingUser) {
       throw new Error('User not found');
@@ -25,18 +26,18 @@ export default class UserService {
     const updatedUser = this.userRepository.merge(existingUser, updateUserDto);
     return await this.userRepository.save(updatedUser);
   }
-  async createUser(user: CreateUserDto): Promise<User> {
+  async createUser(user: CreateUserDto): Promise<UserEntity> {
     const userData = this.userRepository.create(user);
     await this.userRepository.save(userData);
     return userData;
   }
-  async getAllUsers(): Promise<User[]> {
+  async getAllUsers(): Promise<UserEntity[]> {
     return await this.userRepository.find();
   }
-  async getUserById(id: number): Promise<User> {
+  async getUserById(id: number): Promise<UserEntity> {
     return await this.userRepository.findOne({ where: { id } });
   }
-  async subscribeUser(id: number, workShops: Workshop[]): Promise<User> {
+  async subscribeUser(id: number, workShops: Workshop[]): Promise<UserEntity> {
     const user = await this.getUserById(id);
     if (!user) {
       throw new Error('User not found');

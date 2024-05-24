@@ -8,7 +8,7 @@ import {
 import { Workshop } from '../../workshop/entities/workShop.entity';
 
 @Entity()
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

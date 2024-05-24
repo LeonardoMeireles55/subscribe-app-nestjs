@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
-import { User } from '../../user/entities/user.entity';
+import { UserEntity } from '../../user/entities/user.entity';
 
 @Entity()
 export class Workshop {
@@ -24,8 +24,8 @@ export class Workshop {
   @Column({ default: true })
   isActive: boolean;
 
-  @ManyToMany(() => User, (user) => user.workShops)
-  workShopUsers: User[];
+  @ManyToMany(() => UserEntity, (user) => user.workShops)
+  workShopUsers: UserEntity[];
 
   @Column({ name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
