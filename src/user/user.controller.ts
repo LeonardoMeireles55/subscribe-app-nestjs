@@ -9,16 +9,23 @@ import {
 } from '@nestjs/common';
 import UserService from './user.service';
 import { CreateUserDto } from './dto/create.user.dto';
+import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { SubscribeUserDto } from './dto/subscribe.user.dto';
+import { Workshop } from 'src/workshop/entities/workShop.entity';
+import { Any } from 'typeorm';
 
+@ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('subscribe')
-  async subscribeUser(@Body() body: any) {
+  async subscribeUser(@Body() body: SubscribeUserDto) {
     try {
-      const { id, workShops } = body;
-      const user = await this.userService.subscribeUser(id, workShops);
+      const user = await this.userService.subscribeUser(
+        body.id,
+        body.workShops,
+      );
       return {
         success: true,
         data: user,
@@ -32,6 +39,7 @@ export class UserController {
   }
 
   @Post('signup')
+  @ApiBody({ description: 'signup', type: CreateUserDto })
   async create(@Body() createUser: CreateUserDto) {
     try {
       await this.userService.createUser(createUser);
@@ -47,7 +55,7 @@ export class UserController {
     }
   }
 
-  @Get()
+  @Get('getAllUsers')
   async findAll() {
     try {
       const users = await this.userService.getAllUsers();
@@ -63,6 +71,7 @@ export class UserController {
     }
   }
   @Get(':id')
+  @ApiParam({ name: 'id', type: Number })
   async findOneById(@Param('id', ParseIntPipe) id: number) {
     try {
       const user = await this.userService.getUserById(id);

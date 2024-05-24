@@ -1,3 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsString,
   IsEmail,
@@ -5,23 +7,27 @@ import {
   IsArray,
   IsNumber,
 } from 'class-validator';
-import { Workshop } from 'src/workshop/entities/workShop.entity';
 
 export class CreateUserDto {
+  @ApiProperty()
   @IsString()
   firstName: string;
 
+  @ApiProperty()
   @IsString()
   lastName: string;
 
+  @ApiProperty()
   @IsEmail()
   email: string;
 
+  @ApiProperty()
   @IsString()
   password: string;
 
+  @ApiProperty({ type: Number, isArray: true })
   @IsOptional()
   @IsArray()
   @IsNumber({}, { each: true })
-  workShops?: Workshop[];
+  workShops?: number[];
 }
