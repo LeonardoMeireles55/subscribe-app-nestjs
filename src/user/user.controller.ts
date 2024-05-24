@@ -1,4 +1,11 @@
-import { Controller, Get, Patch, Post } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import UserService from './user.service';
 import { CreateUserDto } from './dto/create.user.dto';
 
@@ -38,7 +45,7 @@ export class UserController {
     }
   }
   @Get(':id')
-  async findOne(id: number) {
+  async findOneById(@Param('id', new ParseIntPipe()) id: number) {
     try {
       const user = await this.userService.getUserById(id);
       return {
