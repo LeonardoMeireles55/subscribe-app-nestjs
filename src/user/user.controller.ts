@@ -1,15 +1,20 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpException,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import UserService from './user.service';
 import { CreateUserDto } from './dto/create.user.dto';
-import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { SubscribeUserDto } from './dto/subscribe.user.dto';
 
 @ApiTags('User')
@@ -17,7 +22,19 @@ import { SubscribeUserDto } from './dto/subscribe.user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get('subscribeList')
+  @HttpCode(200)
+  async getSuscribedWorkshops(@Query('id', ParseIntPipe) idUser: number) {
+    try {
+      const user = this.userService.getSuscribedWorkshops(idUser);
+      return user;
+    } catch {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+  }
+
   @Post('subscribe')
+  @HttpCode(200)
   async subscribeUser(@Body() body: SubscribeUserDto) {
     try {
       const user = await this.userService.subscribeUser(
@@ -29,14 +46,12 @@ export class UserController {
         data: user,
       };
     } catch (error) {
-      return {
-        success: false,
-        message: error.message,
-      };
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
   @Post('signup')
+  @HttpCode(201)
   @ApiBody({ description: 'signup', type: CreateUserDto })
   async create(@Body() createUser: CreateUserDto) {
     try {
@@ -46,14 +61,12 @@ export class UserController {
         message: 'User Created Successfully',
       };
     } catch (error) {
-      return {
-        success: false,
-        message: error.message,
-      };
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
   @Get('getAllUsers')
+  @HttpCode(200)
   async findAll() {
     try {
       const users = await this.userService.getAllUsers();
@@ -62,10 +75,7 @@ export class UserController {
         data: users,
       };
     } catch (error) {
-      return {
-        success: false,
-        message: error.message,
-      };
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
   @Get(':id')
@@ -78,13 +88,12 @@ export class UserController {
         data: user,
       };
     } catch (error) {
-      return {
-        success: false,
-        message: error.message,
-      };
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
   @Patch(':id')
+  @HttpCode(200)
+  @ApiParam({ name: 'id', type: Number })
   async update(@Body() id: number, updateUser: CreateUserDto) {
     try {
       await this.userService.updateUser(id, updateUser);
@@ -93,10 +102,7 @@ export class UserController {
         message: 'User Updated Successfully',
       };
     } catch (error) {
-      return {
-        success: false,
-        message: error.message,
-      };
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 }

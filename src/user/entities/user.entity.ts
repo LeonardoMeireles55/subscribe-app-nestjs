@@ -32,6 +32,9 @@ export class UserEntity {
   @ApiProperty({ example: 'securepassword' })
   password: string;
 
+  @Column({ default: 'user' })
+  role: string;
+
   @ManyToMany(() => Workshop, (workshop) => workshop.workShopUsers)
   @JoinTable()
   @ApiProperty({ type: () => Workshop, isArray: true })

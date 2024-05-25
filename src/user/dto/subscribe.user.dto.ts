@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateUserDto } from './create.user.dto';
-import { IsNumber } from 'class-validator';
+import { ArrayNotEmpty, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class SubscribeUserDto extends PartialType(CreateUserDto) {
@@ -8,7 +8,8 @@ export class SubscribeUserDto extends PartialType(CreateUserDto) {
   @IsNumber()
   id: number;
 
-  @ApiProperty({ type: Number, isArray: true })
+  @ApiProperty({ type: Number, isArray: true, required: true })
   @IsNumber({}, { each: true })
+  @ArrayNotEmpty()
   workShops: number[];
 }

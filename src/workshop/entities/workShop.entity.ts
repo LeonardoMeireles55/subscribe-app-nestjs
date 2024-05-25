@@ -1,7 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  Check,
+} from 'typeorm';
 import { UserEntity } from '../../user/entities/user.entity';
-
 @Entity()
+@Check(`"capacity" >= 0`)
 export class Workshop {
   @PrimaryGeneratedColumn()
   id: number;
@@ -12,7 +18,7 @@ export class Workshop {
   @Column()
   description: string;
 
-  @Column()
+  @Column({ default: 0 })
   capacity: number;
 
   @Column()
