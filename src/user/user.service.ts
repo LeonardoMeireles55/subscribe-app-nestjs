@@ -93,6 +93,14 @@ export default class UserService {
         throw new NotFoundException('Workshop not found');
       }
 
+      if (
+        existingWorkshops.map(
+          (existingWorkshops) => existingWorkshops.endDate < new Date(),
+        )
+      ) {
+        throw new Error('Workshop has ended');
+      }
+
       existingWorkshops.forEach((workshop) => {
         if (workshop.capacity <= 0) {
           throw new Error(`Workshop ${workshop.name} is full`);
