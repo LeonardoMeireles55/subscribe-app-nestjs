@@ -103,7 +103,7 @@ export default class UserService {
         workshop.capacity -= 1;
       });
 
-      user.workShops = existingWorkshops;
+      user.workShops = [...subscriptions, ...existingWorkshops];
 
       await manager.save(existingWorkshops);
       return await manager.save(user);
