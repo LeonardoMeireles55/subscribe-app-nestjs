@@ -11,8 +11,6 @@ import UserService from './user.service';
 import { CreateUserDto } from './dto/create.user.dto';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { SubscribeUserDto } from './dto/subscribe.user.dto';
-import { Workshop } from 'src/workshop/entities/workShop.entity';
-import { Any } from 'typeorm';
 
 @ApiTags('User')
 @Controller('user')
