@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
-import { In, Repository, Transaction } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create.user.dto';
 import { Workshop } from 'src/workshop/entities/workShop.entity';
 import { UpdateUserDto } from './dto/update.user.dto';
@@ -77,6 +77,16 @@ export default class UserService {
 
       const existingWorkshops = await this.workshopRepository.findBy({
         id: In(workshopIds),
+      });
+
+      const subscriptions = await this.getSuscribedWorkshops(id);
+
+      workshopIds.forEach((workshopId) => {
+        if (subscriptions.find((workshop) => workshop.id === workshopId)) {
+          throw new Error(
+            `User is already subscribed to workshop ${workshopId}`,
+          );
+        }
       });
 
       if (existingWorkshops.length !== workshopIds.length) {
