@@ -24,6 +24,14 @@ export class UserEntity {
   @ApiProperty({ example: 'Doe' })
   lastName: string;
 
+  @Column({ unique: true })
+  @ApiProperty({ example: '07174672362' })
+  cpf: string;
+
+  @Column({ unique: true })
+  @ApiProperty({ example: '123456' })
+  registerID: string;
+
   @Column()
   @ApiProperty({ example: 'john.doe@example.com' })
   email: string;

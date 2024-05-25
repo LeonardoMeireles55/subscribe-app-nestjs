@@ -18,6 +18,14 @@ export class CreateUserDto {
   lastName: string;
 
   @ApiProperty()
+  @IsString()
+  cpf: string;
+
+  @ApiProperty()
+  @IsString()
+  registerID: string;
+
+  @ApiProperty()
   @IsEmail()
   email: string;
 
