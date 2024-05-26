@@ -3,24 +3,25 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../../entities/user.entity';
 import { In, Repository } from 'typeorm';
 import { CreateUserDto } from '../../dto/create.user.dto';
-import { Workshop } from 'src/entities/workshop.entity';
+import { WorkshopEntity } from 'src/entities/workshop.entity';
 import { UpdateUserDto } from '../../dto/update.user.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export default class UserService {
-  saltOrRounds: number = 10;
+  private saltOrRounds: number = 10;
+
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(WorkshopEntity)
+    private readonly workshopRepository: Repository<WorkshopEntity>,
+  ) {}
 
   async findByEmail(email: string) {
     const user = await this.userRepository.findOne({ where: { email } });
     return user;
   }
-  constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(Workshop)
-    private readonly workshopRepository: Repository<Workshop>,
-  ) {}
 
   async updateUser(
     id: number,

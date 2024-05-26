@@ -7,7 +7,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Workshop } from './workshop.entity';
+import { WorkshopEntity } from './workshop.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
@@ -43,10 +43,10 @@ export class UserEntity {
   @Column({ default: 'user' })
   role: string;
 
-  @ManyToMany(() => Workshop, (workshop) => workshop.workShopUsers)
+  @ManyToMany(() => WorkshopEntity, (workshop) => workshop.workShopUsers)
   @JoinTable()
-  @ApiProperty({ type: () => Workshop, isArray: true })
-  workShops: Workshop[] | number[];
+  @ApiProperty({ type: () => WorkshopEntity, isArray: true })
+  workShops: WorkshopEntity[] | number[];
 
   @Column({ default: true })
   @ApiProperty({ example: true })

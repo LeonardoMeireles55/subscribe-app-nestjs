@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
-import { Workshop } from './entities/workshop.entity';
+import { WorkshopEntity } from './entities/workshop.entity';
 import { UserModule } from './web/user/user.module';
 import { AuthModule } from './config/auth/auth.module';
+import { WorkshopModule } from './web/workshop/workshop.module';
 
 @Module({
   imports: [
@@ -14,14 +15,15 @@ import { AuthModule } from './config/auth/auth.module';
       username: 'root',
       password: 'root',
       database: 'subscribe_db',
-      entities: [UserEntity, Workshop],
+      entities: [UserEntity, WorkshopEntity],
       synchronize: true,
       logging: true,
     }),
     UserModule,
     AuthModule,
+    WorkshopModule,
   ],
   controllers: [],
-  providers: [AuthModule],
+  providers: [],
 })
 export class AppModule {}

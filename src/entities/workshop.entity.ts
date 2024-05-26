@@ -8,7 +8,7 @@ import {
 import { UserEntity } from './user.entity';
 @Entity()
 @Check(`"capacity" >= 0`)
-export class Workshop {
+export class WorkshopEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
