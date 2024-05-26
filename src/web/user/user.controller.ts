@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
@@ -20,7 +19,7 @@ import { SubscribeUserDto } from '../../dto/subscribe.user.dto';
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Get('subscribeList')
   @HttpCode(200)
