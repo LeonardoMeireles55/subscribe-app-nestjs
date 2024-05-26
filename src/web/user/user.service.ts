@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../../entities/user.entity';
 import { In, Repository } from 'typeorm';
@@ -16,7 +16,7 @@ export default class UserService {
     private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(WorkshopEntity)
     private readonly workshopRepository: Repository<WorkshopEntity>,
-  ) {}
+  ) { }
 
   async findByEmail(email: string) {
     const user = await this.userRepository.findOne({ where: { email } });
@@ -83,8 +83,8 @@ export default class UserService {
       const subscriptions = await this.getSuscribedWorkshops(id);
 
       workshopIds.forEach((workshopId) => {
-        if (subscriptions.find((workshop) => workshop.id === workshopId)) {
-          throw new Error(
+        if (subscriptions.find((workshop: { id: number; }) => workshop.id === workshopId)) {
+          throw new ConflictException(
             `User is already subscribed to workshop ${workshopId}`,
           );
         }

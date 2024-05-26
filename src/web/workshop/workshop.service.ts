@@ -8,9 +8,17 @@ export class WorkshopService {
   constructor(
     @InjectRepository(WorkshopEntity)
     private readonly workshopRepository: Repository<WorkshopEntity>,
-  ) {}
+  ) { }
 
   async getAllWorkshops(): Promise<WorkshopEntity[]> {
     return await this.workshopRepository.find();
+  }
+
+  async getWorkshopById(id: number): Promise<WorkshopEntity> {
+    return await this.workshopRepository.findOne({ where: { id } });
+  }
+
+  async createWorkshop(workshop: WorkshopEntity): Promise<void> {
+    await this.workshopRepository.save(workshop);
   }
 }

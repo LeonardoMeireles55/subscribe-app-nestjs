@@ -45,7 +45,7 @@ export class UserController {
         data: user,
       };
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -60,7 +60,7 @@ export class UserController {
         message: 'User Created Successfully',
       };
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -74,7 +74,7 @@ export class UserController {
         data: users,
       };
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
   @Get(':id')
@@ -87,7 +87,7 @@ export class UserController {
         data: user,
       };
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
   @Patch(':id')
@@ -101,7 +101,7 @@ export class UserController {
         message: 'User Updated Successfully',
       };
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 }
