@@ -5,7 +5,7 @@ import {
   ManyToMany,
   Check,
 } from 'typeorm';
-import { UserEntity } from '../../user/entities/user.entity';
+import { UserEntity } from './user.entity';
 @Entity()
 @Check(`"capacity" >= 0`)
 export class Workshop {

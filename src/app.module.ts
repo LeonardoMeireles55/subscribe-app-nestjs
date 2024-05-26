@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from './user/entities/user.entity';
-import { Workshop } from './workshop/entities/workShop.entity';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
+import { UserEntity } from './entities/user.entity';
+import { Workshop } from './entities/workshop.entity';
+import { UserModule } from './web/user/user.module';
+import { AuthModule } from './config/auth/auth.module';
 
 @Module({
   imports: [

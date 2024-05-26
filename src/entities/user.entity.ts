@@ -7,7 +7,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Workshop } from '../../workshop/entities/workShop.entity';
+import { Workshop } from './workshop.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()

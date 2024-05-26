@@ -13,9 +13,9 @@ import {
   Query,
 } from '@nestjs/common';
 import UserService from './user.service';
-import { CreateUserDto } from './dto/create.user.dto';
+import { CreateUserDto } from '../../dto/create.user.dto';
 import { ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { SubscribeUserDto } from './dto/subscribe.user.dto';
+import { SubscribeUserDto } from '../../dto/subscribe.user.dto';
 
 @ApiTags('User')
 @Controller('user')
