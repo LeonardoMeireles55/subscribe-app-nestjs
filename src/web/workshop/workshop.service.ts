@@ -23,6 +23,14 @@ export class WorkshopService {
     return workshop;
   }
 
+  async getWorkshopCapacity(id: number): Promise<number> {
+    const workshop = await this.workshopRepository.findOne({ where: { id } });
+    if (!workshop) {
+      throw new NotFoundException('Workshop not found');
+    }
+    return workshop.capacity;
+  }
+
   async createWorkshop(workshop: CreateWorkshopDto): Promise<WorkshopEntity> {
     try {
       const createdWorkshop = await this.workshopRepository.save(workshop);

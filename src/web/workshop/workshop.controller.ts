@@ -14,9 +14,10 @@ export class WorkshopController {
 
     @HttpCode(201)
     @Post('createWorkshop')
-    async createWorkshop(@Body() body: CreateWorkshopDto): Promise<void> {
+    async createWorkshop(@Body() body: CreateWorkshopDto): Promise<PartialWorkshopDto> {
         try {
             const workshop = await this.workshopService.createWorkshop(body);
+
             const workshopDto: PartialWorkshopDto = {
                 name: workshop.name,
                 description: workshop.description,
@@ -24,7 +25,8 @@ export class WorkshopController {
                 startDate: workshop.startDate,
                 endDate: workshop.endDate
             };
-            console.log(workshop)
+            return workshopDto;
+
         } catch (error) {
             throw new HttpException(error.message, error.status);
         }
@@ -36,6 +38,18 @@ export class WorkshopController {
         try {
             const workShops = await this.workshopService.getAllWorkshops();
             return workShops.length == 0 ? { message: 'No workshops found' } : workShops;
+        } catch (error) {
+            throw new HttpException(error.message, error.status);
+        }
+    }
+
+    @ApiQuery({ name: 'id', type: Number })
+    @HttpCode(200)
+    @Get('capacity/:id')
+    async getWorkshopCapacity(@Query("id", ParseIntPipe) id: number) {
+        try {
+            const capacity = await this.workshopService.getWorkshopCapacity(id);
+            return capacity;
         } catch (error) {
             throw new HttpException(error.message, error.status);
         }
