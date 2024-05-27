@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpException, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpException, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
 import { WorkshopService } from './workshop.service';
 import { CreateWorkshopDto } from '../dto/create.workshop.dto';
 import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
@@ -50,6 +50,17 @@ export class WorkshopController {
         try {
             const capacity = await this.workshopService.getWorkshopCapacity(id);
             return capacity;
+        } catch (error) {
+            throw new HttpException(error.message, error.status);
+        }
+    }
+
+    @ApiParam({ name: 'id', type: Number })
+    @HttpCode(204)
+    @Delete('delete/:id')
+    async deleteWorkshopById(@Query('id', ParseIntPipe) id: number) {
+        try {
+            await this.workshopService.deleleWorkshopById(id);
         } catch (error) {
             throw new HttpException(error.message, error.status);
         }

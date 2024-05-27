@@ -12,7 +12,11 @@ export class WorkshopService {
   ) { }
 
   async getAllWorkshops(): Promise<WorkshopEntity[]> {
-    return await this.workshopRepository.find();
+    return await this.workshopRepository.find({
+      order: {
+        id: 'ASC',
+      },
+    });
   }
 
   async getWorkshopById(id: number): Promise<WorkshopEntity> {
@@ -21,6 +25,14 @@ export class WorkshopService {
       throw new NotFoundException('Workshop not found');
     }
     return workshop;
+  }
+
+  async deleleWorkshopById(id: number): Promise<void> {
+    const workshop = await this.workshopRepository.findOne({ where: { id } });
+    if (!workshop) {
+      throw new NotFoundException('Workshop not found');
+    }
+    await this.workshopRepository.delete(id);
   }
 
   async getWorkshopCapacity(id: number): Promise<number> {
