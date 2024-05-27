@@ -69,9 +69,9 @@ export default class UserService {
     });
   }
 
-  async subscribeUser(id: number, workshopIds: number[]): Promise<UserEntity> {
+  async subscribeUser(userId: number, workshopIds: number[]): Promise<UserEntity> {
     return await this.userRepository.manager.transaction(async (manager) => {
-      const user = await this.getUserById(id);
+      const user = await this.getUserById(userId);
       if (!user) {
         throw new NotFoundException('User not found');
       }
@@ -80,7 +80,7 @@ export default class UserService {
         id: In(workshopIds),
       });
 
-      const subscriptions = await this.getSuscribedWorkshops(id);
+      const subscriptions = await this.getSuscribedWorkshops(userId);
 
       workshopIds.forEach((workshopId) => {
         if (subscriptions.find((workshop: { id: number; }) => workshop.id === workshopId)) {
