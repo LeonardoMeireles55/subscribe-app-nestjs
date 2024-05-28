@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpException, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
 import { WorkshopService } from './workshop.service';
-import { CreateWorkshopDto } from '../dto/create.workshop.dto';
+import { CreateWorkshopDto } from '../../dto/create.workshop.dto';
 import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { PartialWorkshopDto } from '../dto/partial.workshop.dto';
+import { PartialWorkshopDto } from '../../dto/partial.workshop.dto';
 import { WorkshopEntity } from 'src/entities/workshop.entity';
 
 @ApiTags('Workshop')

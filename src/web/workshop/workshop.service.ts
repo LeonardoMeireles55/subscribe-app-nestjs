@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateWorkshopDto } from 'src/web/dto/create.workshop.dto';
+import { CreateWorkshopDto } from 'src/dto/create.workshop.dto';
 import { WorkshopEntity } from 'src/entities/workshop.entity';
 import { Repository } from 'typeorm';
 

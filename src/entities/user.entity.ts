@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { WorkshopEntity } from './workshop.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { Roles } from 'src/web/auth/constants/roles.enum';
 
 @Entity()
 export class UserEntity {
@@ -40,8 +41,8 @@ export class UserEntity {
   @ApiProperty({ example: 'securepassword' })
   password: string;
 
-  @Column({ default: 'user' })
-  role: string;
+  @Column({ default: Roles.User })
+  role: Roles;
 
   @ManyToMany(() => WorkshopEntity, (workshop) => workshop.workShopUsers)
   @JoinTable()

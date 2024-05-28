@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { WorkshopEntity } from './entities/workshop.entity';
 import { UserModule } from './web/user/user.module';
-import { AuthModule } from './config/auth/auth.module';
+import { AuthModule } from './web/auth/auth.module';
 import { WorkshopModule } from './web/workshop/workshop.module';
 
 @Module({
@@ -26,4 +26,4 @@ import { WorkshopModule } from './web/workshop/workshop.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
