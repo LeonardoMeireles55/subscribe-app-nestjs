@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards, Request } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards, Request, HttpException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto } from '../../dto/signin.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -14,7 +14,13 @@ export class AuthController {
   @Public()
   @Post('login')
   signIn(@Body() signInDto: SignInDto): Promise<{ accessToken: string }> {
-    return this.authService.signin(signInDto.email, signInDto.pass);
+    try {
+      return this.authService.signin(signInDto.email, signInDto.pass);
+
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+
+    }
   }
 
   @Get('profile')
