@@ -8,6 +8,7 @@ async function bootstrap() {
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   const config = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('Subscribe API')
     .setDescription('API for subscribing to workshops')
     .setVersion('1.0')

@@ -6,9 +6,10 @@ import { WorkshopEntity } from 'src/entities/workshop.entity';
 import { UserController } from './user.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity, WorkshopEntity])],
+  imports: [TypeOrmModule.forFeature([UserEntity, WorkshopEntity]),
+  ],
   providers: [UserService],
   controllers: [UserController],
   exports: [UserService],
 })
-export class UserModule {}
+export class UserModule { }

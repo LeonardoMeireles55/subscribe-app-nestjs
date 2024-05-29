@@ -13,10 +13,12 @@ import {
 } from '@nestjs/common';
 import UserService from './user.service';
 import { CreateUserDto } from '../../dto/create.user.dto';
-import { ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { SubscribeUserDto } from '../../dto/subscribe.user.dto';
+import { Public } from 'src/web/auth/isPublic.decorator';
 
 @ApiTags('User')
+@ApiBearerAuth()
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) { }
@@ -50,6 +52,7 @@ export class UserController {
   }
 
   @Post('signup')
+  @Public()
   @HttpCode(201)
   @ApiBody({ description: 'signup', type: CreateUserDto })
   async create(@Body() createUser: CreateUserDto) {

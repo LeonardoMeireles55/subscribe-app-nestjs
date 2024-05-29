@@ -10,13 +10,15 @@ export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
-  async signin(email: string, pass: string) {
+  async signin(email: string, pass: string): Promise<{ accessToken: string }> {
     const user = await this.userService.findByEmail(email);
     if (!user) {
       throw new UnauthorizedException();
     }
+
+    const payload = { email: user.email };
 
     const isMatch = await bcrypt.compare(pass, user?.password);
 
@@ -24,10 +26,8 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const payload = { sub: user.id, email: user.email };
-
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      accessToken: await this.jwtService.signAsync(payload),
     };
   }
 }
