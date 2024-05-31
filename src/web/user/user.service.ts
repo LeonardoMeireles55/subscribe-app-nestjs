@@ -80,7 +80,7 @@ export default class UserService {
     return user;
   }
 
-  async getSuscribedWorkshops(id: number): Promise<any> {
+  async getSuscribedWorkshops(id: number): Promise<WorkshopEntity[] | number[]> {
     const user = await this.getUserByIdWithWorkShops(id);
     if (!user) {
       throw new NotFoundException('User not found');
@@ -109,7 +109,7 @@ export default class UserService {
       const subscriptions = await this.getSuscribedWorkshops(userId);
 
       workshopIds.forEach((workshopId) => {
-        if (subscriptions.find((workshop: { id: number; }) => workshop.id === workshopId)) {
+        if (subscriptions.find((workshop: WorkshopEntity) => workshop.id === workshopId)) {
           throw new ConflictException(
             `User is already subscribed to workshop ${workshopId}`,
           );
@@ -119,13 +119,10 @@ export default class UserService {
       if (existingWorkshops.length !== workshopIds.length) {
         throw new NotFoundException('Workshop not found');
       }
-
-      if (
-        existingWorkshops.map(
-          (existingWorkshops) => existingWorkshops.endDate < new Date(),
-        )
-      ) {
-        throw new Error('Workshop has ended');
+      if (existingWorkshops.some(workshop => workshop.endDate < new Date()
+        || !workshop.isActive || workshop.startDate > new Date())) {
+        throw new Error
+          ('Workshop has ended or Workshops are not active or Workshop has not started yet');
       }
 
       existingWorkshops.forEach((workshop) => {
@@ -138,7 +135,7 @@ export default class UserService {
         workshop.capacity -= 1;
       });
 
-      user.workShops = [...subscriptions, ...existingWorkshops];
+      user.workShops = [...subscriptions, ...existingWorkshops] as WorkshopEntity[];
 
       await manager.save(existingWorkshops);
       return await manager.save(user);
