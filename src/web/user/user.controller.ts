@@ -20,6 +20,8 @@ import { Roles } from '../auth/constants/roles.decorator';
 import { Role } from '../auth/constants/roles.enum';
 import { RolesGuard } from '../auth/guards/role.guard';
 import { ChangePasswordUserDto } from 'src/dto/changePassword.user.dto';
+import { WorkshopEntity } from 'src/entities/workshop.entity';
+import { UserEntity } from 'src/entities/user.entity';
 
 @ApiTags('User')
 @ApiBearerAuth()
@@ -31,7 +33,8 @@ export class UserController {
   @Get('subscribeList')
   @Roles(Role.User, Role.Admin)
   @HttpCode(200)
-  async getSuscribedWorkshops(@Query('id', ParseIntPipe) idUser: number) {
+  async getSuscribedWorkshops
+    (@Query('id', ParseIntPipe) idUser: number): Promise<WorkshopEntity[] | number[]> {
     try {
       const user = this.userService.getSuscribedWorkshops(idUser);
       return user;
@@ -43,16 +46,13 @@ export class UserController {
   @Post('subscribe')
   @Roles(Role.User, Role.Admin)
   @HttpCode(200)
-  async subscribeUser(@Body() body: SubscribeUserDto) {
+  async subscribeUser(@Body() body: SubscribeUserDto): Promise<string> {
     try {
       const user = await this.userService.subscribeUser(
         body.id,
         body.workShops,
       );
-      return {
-        success: true,
-        data: user,
-      };
+      return "User subscribed :-)"
     } catch (error) {
       throw new HttpException(error.message, error.status);
     }
@@ -62,13 +62,10 @@ export class UserController {
   @Public()
   @HttpCode(201)
   @ApiBody({ description: 'signup', type: CreateUserDto })
-  async create(@Body() createUser: CreateUserDto) {
+  async create(@Body() createUser: CreateUserDto): Promise<string> {
     try {
       await this.userService.createUser(createUser);
-      return {
-        success: true,
-        message: 'User Created Successfully',
-      };
+      return 'User Created Successfully'
     } catch (error) {
       throw new HttpException(error.message, error.status);
     }
@@ -94,13 +91,11 @@ export class UserController {
   @Get('getAllUsers')
   @Roles(Role.Admin)
   @HttpCode(200)
-  async findAll() {
+  async findAll(): Promise<UserEntity[]> {
     try {
       const users = await this.userService.getAllUsers();
-      return {
-        success: true,
-        data: users,
-      };
+      return users;
+
     } catch (error) {
       throw new HttpException(error.message, error.status);
     }
@@ -108,13 +103,11 @@ export class UserController {
   @Get(':id')
   @Roles(Role.Admin)
   @ApiParam({ name: 'id', type: Number })
-  async findOneById(@Param('id', ParseIntPipe) id: number) {
+  async findOneById(@Param('id', ParseIntPipe) id: number): Promise<UserEntity> {
     try {
       const user = await this.userService.getUserById(id);
-      return {
-        success: true,
-        data: user,
-      };
+      return user;
+
     } catch (error) {
       throw new HttpException(error.message, error.status);
     }
@@ -122,13 +115,11 @@ export class UserController {
   @HttpCode(200)
   @Roles(Role.Admin)
   @ApiParam({ name: 'id', type: Number })
-  async update(@Body() id: number, updateUser: CreateUserDto) {
+  async update(@Body() id: number, updateUser: CreateUserDto): Promise<String> {
     try {
       await this.userService.updateUser(id, updateUser);
-      return {
-        success: true,
-        message: 'User Updated Successfully',
-      };
+      return 'User Updated Successfully';
+
     } catch (error) {
       throw new HttpException(error.message, error.status);
     }

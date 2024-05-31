@@ -18,7 +18,7 @@ export default class UserService {
     private readonly workshopRepository: Repository<WorkshopEntity>,
   ) { }
 
-  async findByEmail(email: string) {
+  async findUserByEmail(email: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { email } });
     if (!user) {
       throw new NotFoundException('User not found');
@@ -45,10 +45,7 @@ export default class UserService {
   }
 
 
-  async updateUser(
-    id: number,
-    updateUserDto: UpdateUserDto,
-  ): Promise<UserEntity> {
+  async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<UserEntity> {
     const existingUser = await this.getUserById(id);
     if (!existingUser) {
       throw new NotFoundException('User not found');

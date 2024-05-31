@@ -53,7 +53,7 @@ export class WorkshopController {
     @HttpCode(200)
     @Public()
     @Get('capacity/:id')
-    async getWorkshopCapacity(@Query("id", ParseIntPipe) id: number) {
+    async getWorkshopCapacity(@Query("id", ParseIntPipe) id: number): Promise<number> {
         try {
             const capacity = await this.workshopService.getWorkshopCapacity(id);
             return capacity;
@@ -66,7 +66,7 @@ export class WorkshopController {
     @HttpCode(204)
     @Roles(Role.Admin)
     @Delete('delete/:id')
-    async deleteWorkshopById(@Query('id', ParseIntPipe) id: number) {
+    async deleteWorkshopById(@Query('id', ParseIntPipe) id: number): Promise<void> {
         try {
             await this.workshopService.deleleWorkshopById(id);
         } catch (error) {
@@ -78,7 +78,7 @@ export class WorkshopController {
     @HttpCode(200)
     @Public()
     @Get('workshop/:id')
-    async getWorkshopById(@Query("id", ParseIntPipe) id: number) {
+    async getWorkshopById(@Query("id", ParseIntPipe) id: number): Promise<WorkshopEntity> {
         try {
             const workshop = await this.workshopService.getWorkshopById(id);
             return workshop;
