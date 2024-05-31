@@ -20,8 +20,30 @@ export default class UserService {
 
   async findByEmail(email: string) {
     const user = await this.userRepository.findOne({ where: { email } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
     return user;
   }
+  async changePassword(id: number, oldPassword: string, newPassword: string): Promise<void> {
+    const user = await this.getUserById(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (!await bcrypt.compare(oldPassword, user.password)) {
+      throw new ConflictException('Password is incorrect');
+    }
+
+    if (await bcrypt.compare(newPassword, user.password)) {
+      throw new ConflictException('Password is the same as the current one');
+    }
+
+    const hashPass = await bcrypt.hash(newPassword, this.saltOrRounds);
+    user.password = hashPass;
+    await this.userRepository.save(user);
+  }
+
 
   async updateUser(
     id: number,
@@ -51,7 +73,11 @@ export default class UserService {
   }
 
   async getUserById(id: number): Promise<UserEntity> {
-    return await this.userRepository.findOne({ where: { id } });
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
   }
 
   async getSuscribedWorkshops(id: number): Promise<any> {

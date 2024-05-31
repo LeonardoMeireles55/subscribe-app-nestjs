@@ -4,7 +4,7 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 import { Repository } from "typeorm";
 import { UnauthorizedException } from "@nestjs/common";
 import { UserEntity } from "src/entities/user.entity";
-import { jwtConstants } from "./constants/jwt.constants";
+import { jwtConstants } from "../constants/jwt.constants";
 
 export class JwtStrategy extends PassportStrategy(Strategy) {
     constructor(

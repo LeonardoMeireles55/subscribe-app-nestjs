@@ -6,9 +6,9 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { jwtConstants } from './constants/jwt.constants';
+import { jwtConstants } from '../constants/jwt.constants';
 import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC_KEY } from './constants/isPublic.decorator';
+import { IS_PUBLIC_KEY } from '../constants/isPublic.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -17,9 +17,6 @@ export class AuthGuard implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
 
         const request = context.switchToHttp().getRequest();
-
-        const roles = this.reflector.getAllAndOverride<string[]>('roles',
-            [context.getHandler(), context.getClass()]);
 
         const token = this.extractTokenFromHeader(request);
 
@@ -46,17 +43,10 @@ export class AuthGuard implements CanActivate {
             );
             request['user'] = payload;
 
-            if (payload.roles) {
-                return this.validateRoles(roles, payload.roles);
-            }
         } catch {
             throw new UnauthorizedException();
         }
         return true;
-    }
-
-    private validateRoles(roles: string[], userRoles: string[]) {
-        return roles.some(role => userRoles.includes(role));
     }
 
     private extractTokenFromHeader(request: Request): string | undefined {

@@ -7,9 +7,9 @@ import {
   HttpStatus,
   Param,
   ParseIntPipe,
-  Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import UserService from './user.service';
 import { CreateUserDto } from '../../dto/create.user.dto';
@@ -18,27 +18,30 @@ import { SubscribeUserDto } from '../../dto/subscribe.user.dto';
 import { Public } from 'src/web/auth/constants/isPublic.decorator';
 import { Roles } from '../auth/constants/roles.decorator';
 import { Role } from '../auth/constants/roles.enum';
+import { RolesGuard } from '../auth/guards/role.guard';
+import { ChangePasswordUserDto } from 'src/dto/changePassword.user.dto';
 
 @ApiTags('User')
 @ApiBearerAuth()
+@UseGuards(RolesGuard)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
   @Get('subscribeList')
-  @Roles(Role.User)
+  @Roles(Role.User, Role.Admin)
   @HttpCode(200)
   async getSuscribedWorkshops(@Query('id', ParseIntPipe) idUser: number) {
     try {
       const user = this.userService.getSuscribedWorkshops(idUser);
       return user;
-    } catch {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
     }
   }
 
   @Post('subscribe')
-  @Roles(Role.User)
+  @Roles(Role.User, Role.Admin)
   @HttpCode(200)
   async subscribeUser(@Body() body: SubscribeUserDto) {
     try {
@@ -66,6 +69,23 @@ export class UserController {
         success: true,
         message: 'User Created Successfully',
       };
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
+  }
+
+  @Post('changePassword')
+  @Roles(Role.User, Role.Admin)
+  @ApiBody({ description: 'changePassword', type: ChangePasswordUserDto })
+  @HttpCode(200)
+  async changePassword(@Body() ChangePasswordUserDto)
+    : Promise<String> {
+    try {
+      await this.userService
+        .changePassword(ChangePasswordUserDto.id, ChangePasswordUserDto.oldPassword,
+          ChangePasswordUserDto.newPassword);
+      return "Password Changed Successfull"
+
     } catch (error) {
       throw new HttpException(error.message, error.status);
     }
