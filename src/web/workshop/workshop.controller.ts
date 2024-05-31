@@ -1,11 +1,15 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpException, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
 import { WorkshopService } from './workshop.service';
 import { CreateWorkshopDto } from '../../dto/create.workshop.dto';
-import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { PartialWorkshopDto } from '../../dto/partial.workshop.dto';
 import { WorkshopEntity } from 'src/entities/workshop.entity';
+import { Public } from '../auth/constants/isPublic.decorator';
+import { Roles } from '../auth/constants/roles.decorator'
+import { Role } from '../auth/constants/roles.enum';
 
 @ApiTags('Workshop')
+@ApiBearerAuth()
 @Controller('workshop')
 export class WorkshopController {
     constructor(
@@ -13,6 +17,7 @@ export class WorkshopController {
     ) { }
 
     @HttpCode(201)
+    @Roles(Role.Admin)
     @Post('createWorkshop')
     async createWorkshop(@Body() body: CreateWorkshopDto): Promise<PartialWorkshopDto> {
         try {
@@ -33,6 +38,7 @@ export class WorkshopController {
     }
 
     @HttpCode(200)
+    @Roles(Role.Admin)
     @Get('list')
     async getAllWorkshops(): Promise<WorkshopEntity[] | { message: string }> {
         try {
@@ -45,6 +51,7 @@ export class WorkshopController {
 
     @ApiQuery({ name: 'id', type: Number })
     @HttpCode(200)
+    @Public()
     @Get('capacity/:id')
     async getWorkshopCapacity(@Query("id", ParseIntPipe) id: number) {
         try {
@@ -57,6 +64,7 @@ export class WorkshopController {
 
     @ApiParam({ name: 'id', type: Number })
     @HttpCode(204)
+    @Roles(Role.Admin)
     @Delete('delete/:id')
     async deleteWorkshopById(@Query('id', ParseIntPipe) id: number) {
         try {
@@ -68,6 +76,7 @@ export class WorkshopController {
 
     @ApiQuery({ name: 'id', type: Number })
     @HttpCode(200)
+    @Public()
     @Get('workshop/:id')
     async getWorkshopById(@Query("id", ParseIntPipe) id: number) {
         try {

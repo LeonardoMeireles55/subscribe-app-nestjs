@@ -13,9 +13,11 @@ import {
 } from '@nestjs/common';
 import UserService from './user.service';
 import { CreateUserDto } from '../../dto/create.user.dto';
-import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { SubscribeUserDto } from '../../dto/subscribe.user.dto';
-import { Public } from 'src/web/auth/isPublic.decorator';
+import { Public } from 'src/web/auth/constants/isPublic.decorator';
+import { Roles } from '../auth/constants/roles.decorator';
+import { Role } from '../auth/constants/roles.enum';
 
 @ApiTags('User')
 @ApiBearerAuth()
@@ -24,6 +26,7 @@ export class UserController {
   constructor(private readonly userService: UserService) { }
 
   @Get('subscribeList')
+  @Roles(Role.User)
   @HttpCode(200)
   async getSuscribedWorkshops(@Query('id', ParseIntPipe) idUser: number) {
     try {
@@ -35,6 +38,7 @@ export class UserController {
   }
 
   @Post('subscribe')
+  @Roles(Role.User)
   @HttpCode(200)
   async subscribeUser(@Body() body: SubscribeUserDto) {
     try {
@@ -68,6 +72,7 @@ export class UserController {
   }
 
   @Get('getAllUsers')
+  @Roles(Role.Admin)
   @HttpCode(200)
   async findAll() {
     try {
@@ -81,6 +86,7 @@ export class UserController {
     }
   }
   @Get(':id')
+  @Roles(Role.Admin)
   @ApiParam({ name: 'id', type: Number })
   async findOneById(@Param('id', ParseIntPipe) id: number) {
     try {
@@ -93,8 +99,8 @@ export class UserController {
       throw new HttpException(error.message, error.status);
     }
   }
-  @Patch(':id')
   @HttpCode(200)
+  @Roles(Role.Admin)
   @ApiParam({ name: 'id', type: Number })
   async update(@Body() id: number, updateUser: CreateUserDto) {
     try {
