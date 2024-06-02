@@ -12,18 +12,16 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Public()
   @Post('login')
-  signIn(@Body() signInDto: SignInDto): Promise<{ accessToken: string }> {
+  async signIn(@Body() signInDto: SignInDto): Promise<{ accessToken: string }> {
     try {
-      return this.authService.signin(signInDto.email, signInDto.pass);
-
+      return await this.authService.signin(signInDto.email, signInDto.pass);
     } catch (error) {
       throw new HttpException(error.message, error.status);
-
     }
   }
 
   @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
+  async getProfile(@Request() req) {
+    return await req.user;
   }
 }

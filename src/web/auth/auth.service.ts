@@ -14,10 +14,10 @@ export class AuthService {
 
   async signin(email: string, pass: string): Promise<{ accessToken: string }> {
     const user = await this.userService.findUserByEmail(email);
+
     if (!user) {
       throw new UnauthorizedException();
     }
-
     const payload = { email: user.email, roles: user.role };
 
     const isMatch = await bcrypt.compare(pass, user?.password);
