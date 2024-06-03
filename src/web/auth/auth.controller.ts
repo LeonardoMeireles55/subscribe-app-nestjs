@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { SignInDto } from '../../dto/signin.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/web/auth/constants/isPublic.decorator';
+import { RecoverPasswordDto } from 'src/dto/recoverPassword.auth.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -15,6 +16,18 @@ export class AuthController {
   async signIn(@Body() signInDto: SignInDto): Promise<{ accessToken: string }> {
     try {
       return await this.authService.signin(signInDto.email, signInDto.pass);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Public()
+  @Post('recoverPassword')
+  async recoverPassword(@Body() body: RecoverPasswordDto) {
+    try {
+      await this.authService.recover(body.email);
+
     } catch (error) {
       throw new HttpException(error.message, error.status);
     }
